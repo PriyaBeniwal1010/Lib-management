@@ -1,5 +1,7 @@
 package com.example.housing.controller;
 
+import com.example.housing.exception.BookNotBorrowedException;
+import com.example.housing.exception.BookNotFoundException;
 import com.example.housing.model.*;
 import com.example.housing.model.Library;
 import com.example.housing.view.LibraryView;
@@ -58,8 +60,15 @@ public class LibraryController {
 
     // Return a book for a member
     public void returnBook(int memberID, int bookID, int qty) {
-        String result = library.returnBook(memberID, bookID, qty);
-        view.displayMessage(result);
+
+        try{
+            String result = library.returnBook(memberID, bookID, qty);
+            view.displayMessage(result);
+        }catch (BookNotBorrowedException e){
+            throw new BookNotBorrowedException("Book not borrowed");
+        }catch(BookNotFoundException e){
+            throw new BookNotFoundException("Book not found");
+        }
     }
 
     // List all available books in the library

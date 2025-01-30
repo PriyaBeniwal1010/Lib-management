@@ -1,5 +1,8 @@
 package com.example.housing.service;
 
+import com.example.housing.exception.BookNotFoundException;
+import com.example.housing.exception.LimitExceedException;
+import com.example.housing.exception.OverdueException;
 import com.example.housing.model.*;
 
 import java.time.LocalDate;
@@ -33,14 +36,20 @@ public class LibraryService {
 
     public Book issueBook() {
         // Find the first available book
-        for (Book book : books) {
-            if (book.getAvailableQuantity() > 1) {
-                book.setIssuedQuantity(book.getAvailableQuantity() - 1);
-                System.out.println("Issue book: " + book.getISBN());
-                return book;  // Issue the book
+        try {
+            for (Book book : books) {
+                if (book.getAvailableQuantity() > 1) {
+                    book.setIssuedQuantity(book.getAvailableQuantity() - 1);
+                    System.out.println("Issue book: " + book.getISBN());
+                    return book;  // Issue the book
+                }
             }
+            return null;  // No books available
+        }catch (BookNotFoundException e) {
+            throw new BookNotFoundException("Book not found");
+        }catch(LimitExceedException f){
+            throw new LimitExceedException("Limit exceeded");
         }
-        return null;  // No books available
     }
 
     public void sortBooksByISBN() {
@@ -61,14 +70,17 @@ public class LibraryService {
 
     // Filter members with overdue books using Streams
     public List<Member> filterOverdueMembers(List<Member> members) {
-        Date currentDate = new Date();  // Current date as Date
+        try {
+            Date currentDate = new Date();  // Current date as Date
 
-        return members.stream()
-                .filter(member -> member.viewBorrowedBooks() != null && !member.viewBorrowedBooks().isEmpty() &&
-                        Arrays.stream(member.viewBorrowedBooks().split(","))
-                                .anyMatch(bookTitle -> issueBook().isBookOverdue(member)))  // Assuming you have a method to check if a book is overdue
-                .collect(Collectors.toList());
-
+            return members.stream()
+                    .filter(member -> member.viewBorrowedBooks() != null && !member.viewBorrowedBooks().isEmpty() &&
+                            Arrays.stream(member.viewBorrowedBooks().split(","))
+                                    .anyMatch(bookTitle -> issueBook().isBookOverdue(member)))  // Assuming you have a method to check if a book is overdue
+                    .collect(Collectors.toList());
+        }catch (OverdueException e) {
+            throw new OverdueException("Overdue Exception");
+        }
 
     }
 
