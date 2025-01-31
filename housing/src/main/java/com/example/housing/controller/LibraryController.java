@@ -4,84 +4,97 @@ import com.example.housing.exception.BookNotBorrowedException;
 import com.example.housing.exception.BookNotFoundException;
 import com.example.housing.model.*;
 import com.example.housing.model.Library;
+import com.example.housing.service.BookLibraryService;
+import com.example.housing.service.MemberLibraryService;
+import com.example.housing.service.MemberRequestBook;
 import com.example.housing.view.LibraryView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 
-@Component
+
+@Service
 public class LibraryController {
-    private Library library;
+    private final BookLibraryService bookLibraryService;
+    private final MemberLibraryService memberLibraryService;
+    private final MemberRequestBook memberRequestBook;
     private final LibraryView view;
 
     @Autowired
-    public LibraryController(Library library, LibraryView view) {
-        this.library = library;
+    public LibraryController(BookLibraryService bookLibraryService,
+                             MemberLibraryService memberLibraryService,
+                             MemberRequestBook memberRequestBook,
+                             LibraryView view) {
+
+        this.bookLibraryService = bookLibraryService;
+        this.memberLibraryService = memberLibraryService;
+        this.memberRequestBook = memberRequestBook;
         this.view = view;
     }
 
-    // Add a new book to the library
-    public void addBook(Book book) {
-        library.addBook(book);
-        view.displayMessage("Book added successfully: " + book.getBookName());
+    public String addBook(Book book) {
+        // Calling the BookLibraryService method to add the book
+        return bookLibraryService.addBook(book);
     }
 
-    // Remove a book from the library
-    public void removeBook(int bookID) {
-        String result = library.removeBook(bookID);
-        view.displayMessage(result);
+    // This can be used to get details of a specific book by bookId
+    public String getBookDetails(int bookId) {
+      return bookLibraryService.getBookDetails(bookId);
     }
 
-    // Add a new member to the library
+    public void updateBookDetails(int bookId, String bookName, String ISBN, int totalQty, int issuedQty, boolean isDRMProtected, String downloadLink) {
+        HashSet<String> bookStore = new HashSet<>();
+        bookLibraryService.updateBookDetails(bookId, bookName, ISBN, totalQty, issuedQty, isDRMProtected, downloadLink, bookStore);
+    }
+
+    // This can be used to delete a book from the library by bookId
+    public String deleteBook(int bookId) {
+        return bookLibraryService.deleteBook(bookId);
+    }
+
+    // Fetch all books in the library
+    public List<Book> getAllBooks() {
+        return bookLibraryService.getBookStock();
+    }
+
     public void addMember(Member member) {
-        library.addMember(member);
-        view.displayMessage("Member added successfully: " + member.getName());
+        memberLibraryService.addMember(member);
     }
 
-    // Authenticate a member
-    public void authenticateMember(int memberID, String password) {
-        Member member = library.authenticateMember(memberID, password);
-        if (member != null) {
-            view.displayMessage("Member authenticated successfully: " + member.getName());
-        } else {
-            view.displayMessage("Authentication failed.");
-        }
+    // Method to remove a member
+    public void removeMember(Member member) {
+        memberLibraryService.removeMember(member);
     }
 
-    // Borrow a book for a member
-    public void borrowBook(int memberID, int bookID, int qty) {
-        String result = library.borrowBook(memberID, bookID, qty);
-        view.displayMessage(result);
+    // Method to update a member's details
+    public void updateMemberRecord(int id, String name, String password, HashSet<Book> borrowedBooks) {
+        memberLibraryService.updateMemberRecord(id, name, password, borrowedBooks);
     }
 
-    // Return a book for a member
-    public void returnBook(int memberID, int bookID, int qty) {
-
-        try{
-            String result = library.returnBook(memberID, bookID, qty);
-            view.displayMessage(result);
-        }catch (BookNotBorrowedException e){
-            throw new BookNotBorrowedException("Book not borrowed");
-        }catch(BookNotFoundException e){
-            throw new BookNotFoundException("Book not found");
-        }
+    // Method to remove a member by ID
+    public String removeMemberRecord(int id) {
+        return memberLibraryService.removeMemberRecord(id);
     }
 
-    // List all available books in the library
-    public void listBooks() {
-        String bookList = library.listBooks();
-        view.displayMessage(bookList);
+    public void addRequest(Member member, Book book) {
+        memberRequestBook.addRequest(member, book);
     }
 
-    // View borrowed books for a specific member
-    public void viewBorrowedBooks(int memberID) {
-        String borrowedBooks = library.viewBorrowedBooks(memberID);
-        view.displayMessage(borrowedBooks);
+    // Method to process a book request for a specific member and book
+    public void processRequest(Member member, Book book, int qty) {
+        memberRequestBook.processRequest(member, book, qty);
     }
+
+    // Method to shut down the executor gracefully
+    public void shutdownExecutor() {
+        memberRequestBook.shutdown();
+    }
+
+
+
 
 
 

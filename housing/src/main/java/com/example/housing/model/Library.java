@@ -1,10 +1,14 @@
 package com.example.housing.model;
 
+import com.example.housing.exception.BookNotBorrowedException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Library {
     private List<Book> books;
@@ -42,16 +46,11 @@ public class Library {
 
     // Authenticate a member by their ID and password
     public Member authenticateMember(int memberID, String password) {
-        for (Member member : members) {
-            if (member.getMemberID() == memberID && member.authenticate(password)) {
-                return member;
-            }
-        }
-        return null;  // Return null if authentication fails
+        return members.stream().filter((Member member) -> member.getMemberID() == memberID).findFirst().orElse(null);
     }
 
     // Issue a book to a member if available
-    public String borrowBook(int memberID, int bookID, int qty) {
+    public synchronized String borrowBook(int memberID, int bookID, int qty) {
         Member member = findMemberByID(memberID);
         Book book = findBookByID(bookID);
 
@@ -69,14 +68,18 @@ public class Library {
     }
 
     // Return a borrowed book and update stock
-    public String returnBook(int memberID, int bookID, int qty) {
+    public synchronized String returnBook(int memberID, int bookID, int qty) throws BookNotBorrowedException {
         Member member = findMemberByID(memberID);
         Book book = findBookByID(bookID);
+        try {
+            member.getBorrowedBooks().contains(book);
+        }catch(BookNotBorrowedException e) {
+            System.out.println(e.getMessage());
+        }
 
         if (member == null || book == null) {
             return "Member or Book not found.";
         }
-
         // Proceed with returning the book
         String returnStatus = member.returnBook(book, qty);
 
@@ -84,7 +87,6 @@ public class Library {
             // Update the stock of the book in the library
             updateBookStock(book, qty);
         }
-
         return returnStatus;
     }
 
@@ -143,4 +145,13 @@ public class Library {
         String borrowedBooks = member.viewBorrowedBooks();  // Get the list of borrowed books
         return borrowedBooks != null ? borrowedBooks : "No books borrowed.";
     }
+
+    public List<Book> SortBooks() {
+        return books.stream().sorted().collect(Collectors.toList());
+    }
+
+    public List<Member> SortMembers(){
+        return members.stream().sorted(Comparator.comparing(Member::getMemberID)).collect(Collectors.toList());
+    }
+
 }

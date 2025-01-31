@@ -1,29 +1,26 @@
 package com.example.housing.model;
 
+import com.example.housing.exception.BookNotBorrowedException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Member {
     private int memberID;
     private String name;
-    private String email;
     private String password;
-    private ArrayList<Book> borrowedBooks;// List of books the member has borrowed
+    private HashSet<Book> borrowedBooks;// List of books the member has borrowed
 
     // Constructor to initialize member attributes
-    public Member(int memberID, String name, String email, String password, ArrayList<Book> borrowedBooks) {
+    public Member(int memberID, String name, String password, HashSet<Book> borrowedBooks) {
         this.memberID = memberID;
         this.name = name;
-        this.email = email;
         this.password = password;
-        this.borrowedBooks = new ArrayList<>();
+        this.borrowedBooks = new HashSet<>();
     }
 
     // Getter and setter methods
@@ -43,14 +40,6 @@ public class Member {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -59,45 +48,14 @@ public class Member {
         this.password = password;
     }
 
+    public HashSet<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
     // Authenticate the member by matching ID and password
     public boolean authenticate(String enteredPassword) {
         return this.password.equals(enteredPassword);
     }
 
-    // Borrow a book if it's available
-    public String borrowBook(Book book, int qty) {
-        // Check if book is available to borrow
-        String borrowMessage = book.borrowBook(qty);
-        if (borrowMessage.equals("Book Issued Successfully")) {
-            for (int i = 0; i < qty; i++) {
-                borrowedBooks.add(book);  // Add the borrowed book to the member's list
-            }
-            return borrowMessage;
-        } else {
-            return borrowMessage;  // If borrowing fails, return the error message
-        }
-    }
-
-    // Return a borrowed book
-    public String returnBook(Book book, int qty) {
-        int booksReturned = 0;
-        for (int i = 0; i < borrowedBooks.size(); i++) {
-            if (borrowedBooks.get(i).getBookID() == book.getBookID()) {
-                borrowedBooks.remove(i);  // Remove book from borrowed list
-                booksReturned++;
-                if (booksReturned == qty) {
-                    break;
-                }
-            }
-        }
-        if (booksReturned == qty) {
-            return "Book(s) returned successfully.";
-        } else {
-            return "Error: You are trying to return more books than borrowed.";
-        }
-    }
-
-    // View all borrowed books
     public String viewBorrowedBooks() {
         if (borrowedBooks.isEmpty()) {
             return "You have not borrowed any books.";
@@ -110,4 +68,28 @@ public class Member {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return memberID == member.memberID;  // Compare by id
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(memberID);  // Use id to calculate hash code
+    }
+
+    public String borrowBook(Book book, int qty) {
+        borrowedBooks.add(book);
+        book.setIssuedQuantity(book.getIssuedQuantity() + qty);
+        return book.getBookName()+"issued Successfully";
+    }
+
+    public String returnBook(Book book, int qty) {
+        borrowedBooks.remove(book);
+        book.setIssuedQuantity(book.getIssuedQuantity() - qty);
+        return book.getBookName()+"returned Successfully";
+    }
 }
