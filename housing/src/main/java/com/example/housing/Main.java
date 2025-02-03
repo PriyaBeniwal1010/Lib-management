@@ -1,16 +1,19 @@
 package com.example.housing;
 
-import com.example.housing.controller.*;
+import com.example.housing.controller.LibraryController;
 import com.example.housing.model.Book;
 import com.example.housing.model.Member;
-import com.example.housing.model.StudentMember;
 import com.example.housing.model.PrintBook;
+import com.example.housing.model.StudentMember;
 import com.example.housing.service.BookLibraryService;
 import com.example.housing.service.MemberLibraryService;
 import com.example.housing.service.MemberRequestBook;
 import com.example.housing.view.LibraryView;
+import com.example.housing.Utility.LibraryUtils;
 
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 
 public class Main {
 
@@ -20,7 +23,7 @@ public class Main {
         BookLibraryService bookLibraryService = new BookLibraryService();
         MemberLibraryService memberLibraryService = new MemberLibraryService();
         MemberRequestBook memberRequestBook = new MemberRequestBook();
-        LibraryController memberRequestBookController = new LibraryController(bookLibraryService, memberLibraryService, memberRequestBook, libraryView);
+        LibraryController libraryController = new LibraryController(bookLibraryService, memberLibraryService, memberRequestBook, libraryView);
 
         // Initialize Books and Members for Testing
         libraryView.displayMessage("Starting Library Application...");
@@ -34,7 +37,6 @@ public class Main {
         stores.add("Delhi");
         stores.add("Mumbai");
 
-
         Book book = new PrintBook(1, "Java Programming", "12345", 10, 5, stores);
         bookLibraryService.addBook(book);
 
@@ -43,23 +45,44 @@ public class Main {
         libraryView.displayMessage("Initial Book Details: " + bookDetails);
 
         // Add member's request to borrow a book
-        memberRequestBookController.addRequest(member, book);
-        memberRequestBookController.processRequest(member, book, 1);
+        libraryController.addRequest(member, book);
+        libraryController.processRequest(member, book, 1);
 
         // Attempt to borrow a book with qty exceeding limit
         Book ebook = new PrintBook(2, "Advanced Java", "12346", 5, 3, stores);
-        memberRequestBookController.addRequest(member, ebook);
-        memberRequestBookController.processRequest(member, ebook, 10);  // Trying to borrow more than allowed
+        libraryController.addRequest(member, ebook);
+        libraryController.processRequest(member, ebook, 10);  // Trying to borrow more than allowed
 
         // Shut down executor after processing
-        memberRequestBookController.shutdownExecutor();
+        libraryController.shutdownExecutor();
 
         // Remove member
         memberLibraryService.removeMember(member);
         libraryView.displayMessage("Member removed: " + member.getName());
+
+        System.out.println("______________");
+        try {
+            LibraryUtils.serializeBookList(bookLibraryService.getBookStock());
+            LibraryUtils.serializeMemberList(memberLibraryService.getMembersRecord());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Serialize the entire library (books and members) to a single file
+        try {
+            LibraryUtils.serializeLibrary(bookLibraryService.getBookStock(), memberLibraryService.getMembersRecord());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Deserialize the entire library
+        try {
+            LibraryUtils.deserializeLibrary();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
-
 
 
 
