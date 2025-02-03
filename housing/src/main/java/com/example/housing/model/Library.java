@@ -2,6 +2,7 @@ package com.example.housing.model;
 
 import com.example.housing.exception.BookNotBorrowedException;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -10,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Library {
+public class Library implements Serializable {
     private List<Book> books;
     private List<Member> members;
 

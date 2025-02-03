@@ -5,14 +5,11 @@ import com.example.housing.model.Book;
 import com.example.housing.model.Member;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MemberLibraryService {
-    private HashSet<Member> membersRecord;
+    private final HashSet<Member> membersRecord;
 
     public MemberLibraryService() {
         membersRecord = new HashSet<>();
@@ -23,6 +20,10 @@ public class MemberLibraryService {
     }
     public void removeMember(Member member) {
         membersRecord.remove(member);
+    }
+
+    public List<Member> getMembersRecord() {
+        return new ArrayList<>(membersRecord);
     }
 
 
@@ -54,7 +55,7 @@ public class MemberLibraryService {
         }catch(MemberNotExists e) {
             System.out.println(e);
         }
-        return "Attampt Failed";
+        return "Attempt Failed";
     }
 
     public List<Member> sortMembersByID() {

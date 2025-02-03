@@ -9,14 +9,20 @@ import com.example.housing.service.MemberLibraryService;
 import com.example.housing.service.MemberRequestBook;
 import com.example.housing.view.LibraryView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnCheckpointRestore;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+
 
 import java.util.HashSet;
 import java.util.List;
 
 
-@Service
+
+
+@Controller
+
 public class LibraryController {
     private final BookLibraryService bookLibraryService;
     private final MemberLibraryService memberLibraryService;
@@ -92,6 +98,7 @@ public class LibraryController {
     public void shutdownExecutor() {
         memberRequestBook.shutdown();
     }
+
 
 
 

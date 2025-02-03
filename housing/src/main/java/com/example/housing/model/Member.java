@@ -4,13 +4,14 @@ import com.example.housing.exception.BookNotBorrowedException;
 import com.example.housing.model.Validation.NotNull;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Member {
+public class Member implements Serializable {
     @NotNull(message = "MemberID is a must")
     private int memberID;
     private String name;

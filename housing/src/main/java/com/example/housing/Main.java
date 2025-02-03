@@ -10,15 +10,18 @@ import com.example.housing.service.MemberLibraryService;
 import com.example.housing.service.MemberRequestBook;
 import com.example.housing.view.LibraryView;
 import com.example.housing.Utility.LibraryUtils;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 
+
+@SpringBootApplication
 public class Main {
 
-    public static void main(String[] args) {
-        // Instantiate the services and components manually (no Spring Boot dependency injection here)
+    public static void main(String[] args) throws Exception {
+
         LibraryView libraryView = new LibraryView();
         BookLibraryService bookLibraryService = new BookLibraryService();
         MemberLibraryService memberLibraryService = new MemberLibraryService();
@@ -82,8 +85,9 @@ public class Main {
             e.printStackTrace();
         }
     }
-}
 
+
+}
 
 
 

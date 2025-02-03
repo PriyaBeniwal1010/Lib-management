@@ -9,10 +9,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookLibraryService {
-    HashSet<Book> bookStock;
+    private HashSet<Book> bookStock;
 
-    @Autowired
+
     public BookLibraryService() {
+
         bookStock = new HashSet<>();
     }
 
@@ -82,5 +83,7 @@ public class BookLibraryService {
                 .filter(book -> book instanceof EBook) // Filters only EBook type
                 .collect(Collectors.toList());
     }
+
+
 }
 

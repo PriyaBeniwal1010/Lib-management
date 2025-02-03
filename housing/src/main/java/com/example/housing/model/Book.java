@@ -3,9 +3,10 @@ package com.example.housing.model;
 import com.example.housing.model.Validation.NotNull;
 import com.example.housing.model.Validation.ValidISBN;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Book {
+public abstract class Book implements Serializable {
     // Book details
     private int bookID;
     @NotNull(message = "Book name is required")
