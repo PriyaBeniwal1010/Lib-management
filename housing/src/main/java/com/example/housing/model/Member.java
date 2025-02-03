@@ -1,6 +1,7 @@
 package com.example.housing.model;
 
 import com.example.housing.exception.BookNotBorrowedException;
+import com.example.housing.model.Validation.NotNull;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Member {
+    @NotNull(message = "MemberID is a must")
     private int memberID;
     private String name;
     private String password;

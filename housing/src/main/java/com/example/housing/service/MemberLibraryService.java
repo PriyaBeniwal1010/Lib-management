@@ -5,8 +5,11 @@ import com.example.housing.model.Book;
 import com.example.housing.model.Member;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MemberLibraryService {
     private HashSet<Member> membersRecord;
@@ -53,4 +56,18 @@ public class MemberLibraryService {
         }
         return "Attampt Failed";
     }
+
+    public List<Member> sortMembersByID() {
+        return membersRecord.stream()
+                .sorted(Comparator.comparingInt(Member::getMemberID)) // Sorting by Member ID
+                .collect(Collectors.toList());
+    }
+
+    // Sort members by name
+    public List<Member> sortMembersByName() {
+        return membersRecord.stream()
+                .sorted(Comparator.comparing(Member::getName)) // Sorting by Member Name
+                .collect(Collectors.toList());
+    }
+
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookLibraryService {
@@ -59,6 +60,27 @@ public class BookLibraryService {
 
     public List<Book> getBookStock() {
         return new ArrayList<>(bookStock);
+    }
+
+    public List<Book> sortBooksByTitle() {
+        return bookStock.stream()
+                .sorted(Comparator.comparing(Book::getBookName)) // Assuming getBookName() returns the title of the book
+                .collect(Collectors.toList());
+    }
+
+
+    // Filter books by availability (e.g., books that have available quantity > 0)
+    public List<Book> filterAvailableBooks() {
+        return bookStock.stream()
+                .filter(book -> book.getAvailableQuantity() > 0) // Assuming getAvailableQuantity() returns the available quantity
+                .collect(Collectors.toList());
+    }
+
+    // Filter books by type (e.g., EBooks)
+    public List<Book> filterEBooks() {
+        return bookStock.stream()
+                .filter(book -> book instanceof EBook) // Filters only EBook type
+                .collect(Collectors.toList());
     }
 }
 

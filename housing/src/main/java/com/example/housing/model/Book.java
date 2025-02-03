@@ -1,11 +1,16 @@
 package com.example.housing.model;
 
+import com.example.housing.model.Validation.NotNull;
+import com.example.housing.model.Validation.ValidISBN;
+
 import java.util.Objects;
 
 public abstract class Book {
     // Book details
     private int bookID;
+    @NotNull(message = "Book name is required")
     private String bookName;
+    @ValidISBN(message="ISBN no is of 13 digits")
     private String ISBN;
     private int totalQuantity;  // Total number of books available in the library
     private int issuedQuantity; // Number of books already borrowed;
