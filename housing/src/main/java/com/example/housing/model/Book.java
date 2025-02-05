@@ -2,10 +2,11 @@ package com.example.housing.model;
 
 import com.example.housing.model.Validation.NotNull;
 import com.example.housing.model.Validation.ValidISBN;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.Serializable;
 import java.util.Objects;
-
+@JsonDeserialize(using = BookDeserializer.class)
 public abstract class Book implements Serializable {
     // Book details
     private int bookID;
@@ -99,10 +100,9 @@ public abstract class Book implements Serializable {
         return Objects.hash(ISBN); // Generate hash code based on ISBN
     }
 
-
-
+    @Override
     // Returns detailed info about the book
-    public String tostring() {
+    public String toString() {
         return "Book Information:\n" +
                 "Book ID: " + getBookID() + "\n" +
                 "Book Name: " + getBookName() + "\n" +
@@ -110,6 +110,7 @@ public abstract class Book implements Serializable {
                 "Total Quantity: " + getTotalQuantity() + "\n" +
                 "Available Copies: " + getAvailableQuantity() + "\n";
     }
+
 
 
 }

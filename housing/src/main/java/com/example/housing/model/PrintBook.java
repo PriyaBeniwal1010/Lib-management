@@ -13,13 +13,14 @@ public class PrintBook extends Book {
     }
 
 
-
-
     @Override
     public String getBookInfo() {
         return "PrintBook Information:\n" +
                 "Book Name: " + getBookName() + "\n" +
-                "Available at stores: " + availableStores;
+                "Book isbn"+getISBN()+ "\n"+
+                "Book Total Quantity: " + getTotalQuantity() + "\n"+
+                "Book Issue Quantity: " + getIssuedQuantity() + "\n"+
+                "Book Available Stores: " + availableStores;
     }
 
     public void addAvailableQuantity(int qty) {

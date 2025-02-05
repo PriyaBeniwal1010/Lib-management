@@ -21,103 +21,76 @@ import java.util.HashSet;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        SpringApplication.run(Main.class, args);
 
-        LibraryView libraryView = new LibraryView();
-        BookLibraryService bookLibraryService = new BookLibraryService();
-        MemberLibraryService memberLibraryService = new MemberLibraryService();
-        MemberRequestBook memberRequestBook = new MemberRequestBook();
-        LibraryController libraryController = new LibraryController(bookLibraryService, memberLibraryService, memberRequestBook, libraryView);
 
-        // Initialize Books and Members for Testing
-        libraryView.displayMessage("Starting Library Application...");
+//        LibraryView libraryView = new LibraryView();
+//        BookLibraryService bookLibraryService = new BookLibraryService();
+//        MemberLibraryService memberLibraryService = new MemberLibraryService();
+//        MemberRequestBook memberRequestBook = new MemberRequestBook();
+//        LibraryController libraryController = new LibraryController(bookLibraryService, memberLibraryService, memberRequestBook, libraryView);
+//
+//        // Initialize Books and Members for Testing
+//        libraryView.displayMessage("Starting Library Application...");
+//
+//        // Create a member
+//        Member member = new StudentMember(1, "John Doe", "password123", new HashSet<>(), 8);
+//        memberLibraryService.addMember(member);
+//
+//        // Create a book
+//        HashSet<String> stores = new HashSet<>();
+//        stores.add("Delhi");
+//        stores.add("Mumbai");
+//
+//        Book book = new PrintBook(1, "Java Programming", "12345", 10, 5, stores);
+//        bookLibraryService.addBook(book);
+//
+//        // Show initial book details
+//        String bookDetails = bookLibraryService.getBookDetails(book.getBookID());
+//        libraryView.displayMessage("Initial Book Details: " + bookDetails);
+//
+//        // Add member's request to borrow a book
+//        libraryController.addRequest(member, book);
+//        libraryController.processRequest(member, book, 1);
+//
+//        // Attempt to borrow a book with qty exceeding limit
+//        Book ebook = new PrintBook(2, "Advanced Java", "12346", 5, 3, stores);
+//        libraryController.addRequest(member, ebook);
+//        libraryController.processRequest(member, ebook, 10);  // Trying to borrow more than allowed
+//
+//        // Shut down executor after processing
+//        libraryController.shutdownExecutor();
+//
+//        // Remove member
+//        memberLibraryService.removeMember(member);
+//        libraryView.displayMessage("Member removed: " + member.getName());
+//
+//        System.out.println("______________");
+//        try {
+//            LibraryUtils.serializeBookList(bookLibraryService.getBookStock());
+//            LibraryUtils.serializeMemberList(memberLibraryService.getMembersRecord());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Serialize the entire library (books and members) to a single file
+//        try {
+//            LibraryUtils.serializeLibrary(bookLibraryService.getBookStock(), memberLibraryService.getMembersRecord());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Deserialize the entire library
+//        try {
+//            LibraryUtils.deserializeLibrary();
+//        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
-        // Create a member
-        Member member = new StudentMember(1, "John Doe", "password123", new HashSet<>(), 8);
-        memberLibraryService.addMember(member);
-
-        // Create a book
-        HashSet<String> stores = new HashSet<>();
-        stores.add("Delhi");
-        stores.add("Mumbai");
-
-        Book book = new PrintBook(1, "Java Programming", "12345", 10, 5, stores);
-        bookLibraryService.addBook(book);
-
-        // Show initial book details
-        String bookDetails = bookLibraryService.getBookDetails(book.getBookID());
-        libraryView.displayMessage("Initial Book Details: " + bookDetails);
-
-        // Add member's request to borrow a book
-        libraryController.addRequest(member, book);
-        libraryController.processRequest(member, book, 1);
-
-        // Attempt to borrow a book with qty exceeding limit
-        Book ebook = new PrintBook(2, "Advanced Java", "12346", 5, 3, stores);
-        libraryController.addRequest(member, ebook);
-        libraryController.processRequest(member, ebook, 10);  // Trying to borrow more than allowed
-
-        // Shut down executor after processing
-        libraryController.shutdownExecutor();
-
-        // Remove member
-        memberLibraryService.removeMember(member);
-        libraryView.displayMessage("Member removed: " + member.getName());
-
-        System.out.println("______________");
-        try {
-            LibraryUtils.serializeBookList(bookLibraryService.getBookStock());
-            LibraryUtils.serializeMemberList(memberLibraryService.getMembersRecord());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Serialize the entire library (books and members) to a single file
-        try {
-            LibraryUtils.serializeLibrary(bookLibraryService.getBookStock(), memberLibraryService.getMembersRecord());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Deserialize the entire library
-        try {
-            LibraryUtils.deserializeLibrary();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//
+//
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

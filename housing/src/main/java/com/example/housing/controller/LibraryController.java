@@ -1,5 +1,6 @@
 package com.example.housing.controller;
 
+import ch.qos.logback.core.model.Model;
 import com.example.housing.exception.BookNotBorrowedException;
 import com.example.housing.exception.BookNotFoundException;
 import com.example.housing.model.*;
@@ -9,19 +10,22 @@ import com.example.housing.service.MemberLibraryService;
 import com.example.housing.service.MemberRequestBook;
 import com.example.housing.view.LibraryView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnCheckpointRestore;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
-
-
-@Controller
+@RestController
 
 public class LibraryController {
     private final BookLibraryService bookLibraryService;
@@ -41,28 +45,43 @@ public class LibraryController {
         this.view = view;
     }
 
-    public String addBook(Book book) {
+    @PostMapping("/Books")
+    public String addBook(@RequestBody Book book){
         // Calling the BookLibraryService method to add the book
-        return bookLibraryService.addBook(book);
+        return bookLibraryService.addBook( book);
     }
 
     // This can be used to get details of a specific book by bookId
-    public String getBookDetails(int bookId) {
-      return bookLibraryService.getBookDetails(bookId);
+    @GetMapping("/books/{ID}")
+    public String getBookDetails(@PathVariable("ID") int bookId) {
+       return bookLibraryService.getBookDetails(bookId);
+
     }
 
-    public void updateBookDetails(int bookId, String bookName, String ISBN, int totalQty, int issuedQty, boolean isDRMProtected, String downloadLink) {
-        HashSet<String> bookStore = new HashSet<>();
-        bookLibraryService.updateBookDetails(bookId, bookName, ISBN, totalQty, issuedQty, isDRMProtected, downloadLink, bookStore);
+    @PutMapping("/Books/{ID}")
+    public void updateBookDetails(@PathVariable("ID") int bookId, @RequestBody String bookName) {
+        bookLibraryService.updateBookDetails(bookId, bookName);
+        System.out.print("Book updated successfully");
     }
+
 
     // This can be used to delete a book from the library by bookId
-    public String deleteBook(int bookId) {
-        return bookLibraryService.deleteBook(bookId);
+    @DeleteMapping("/Books/{ID}")
+    public String deleteBook(@PathVariable("ID")int bookId) {
+        try {
+            return bookLibraryService.deleteBook(bookId);
+        }catch (BookNotFoundException e) {
+            return e.getMessage();
+        }
+
     }
 
     // Fetch all books in the library
+    @GetMapping("/Books")
     public List<Book> getAllBooks() {
+//        getAllBooksHashSet<String> locations = new HashSet<>(Arrays.asList("hr", "delhi", "mumbai"));
+//        Book book1=new PrintBook(78, "Hello", "9076554332", 90, 87, locations);
+//        return List.of(book1);
         return bookLibraryService.getBookStock();
     }
 
@@ -99,7 +118,11 @@ public class LibraryController {
         memberRequestBook.shutdown();
     }
 
-
+//    @RequestMapping(value = "/greet", method=RequestMethod.GET)
+//    public String hello(Model model) {
+//      //  model.addAttribute( "Hello World, welcome to my library!");
+//        return "hello welcome to the library";
+//    }
 
 
 

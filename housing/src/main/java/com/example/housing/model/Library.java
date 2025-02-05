@@ -1,6 +1,7 @@
 package com.example.housing.model;
 
 import com.example.housing.exception.BookNotBorrowedException;
+import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class Library implements Serializable {
     private List<Book> books;
     private List<Member> members;
@@ -20,10 +22,6 @@ public class Library implements Serializable {
         this.members = members;
     }
 
-    public static Date convertToDate(LocalDate localDate) {
-        LocalDateTime localDateTime = localDate.atStartOfDay();
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
 
     // Method to add a new book to the library
     public void addBook(Book book) {

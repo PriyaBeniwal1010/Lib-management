@@ -4,12 +4,13 @@ import com.example.housing.exception.MemberNotExists;
 import com.example.housing.model.Book;
 import com.example.housing.model.Member;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+@Service
 public class MemberLibraryService {
-    private final HashSet<Member> membersRecord;
+    private  HashSet<Member> membersRecord;
 
     public MemberLibraryService() {
         membersRecord = new HashSet<>();

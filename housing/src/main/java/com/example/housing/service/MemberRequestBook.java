@@ -69,8 +69,7 @@ public class MemberRequestBook {
                 if(requestedBook.availableBook(requestedBook.getBookID())){
                     student.getBorrowedBooks().add(requestedBook);
                     memberLibraryService.updateMemberRecord(student.getMemberID(), student.getName(), student.getPassword(), student.getBorrowedBooks());
-                    bookLibraryService.updateBookDetails(requestedBook.getBookID(),requestedBook.getBookName(), requestedBook.getISBN(), requestedBook.getTotalQuantity(), requestedBook.setIssuedQuantity(requestedBook.getIssuedQuantity()-qty), requestedBook.isDRMProtected(), requestedBook.getDownloadLink(), null);
-                    return "Book issued Successfully to"+student.getName();
+                    bookLibraryService.updateBookDetails(requestedBook.getBookID(),requestedBook.getBookName());
                 }
 
             }else{
@@ -78,7 +77,7 @@ public class MemberRequestBook {
                 if(requestedBook.getAvailableQuantity() >= qty){
                     student.getBorrowedBooks().add(requestedBook);
                     memberLibraryService.updateMemberRecord(student.getMemberID(), student.getName(), student.getPassword(), student.getBorrowedBooks());
-                    bookLibraryService.updateBookDetails(requestedBook.getBookID(),requestedBook.getBookName(), requestedBook.getISBN(), requestedBook.getTotalQuantity(), requestedBook.getAvailableQuantity(), false, null, requestedBook.getBookStore());
+                    bookLibraryService.updateBookDetails(requestedBook.getBookID(),requestedBook.getBookName());
                     return "Book issued Successfully to"+student.getName();
                 }
             }
