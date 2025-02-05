@@ -1,5 +1,6 @@
 package com.example.housing.service;
 
+import com.example.housing.dto.BookDto;
 import com.example.housing.exception.BookNotFoundException;
 import com.example.housing.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +13,34 @@ import java.util.stream.Collectors;
 public class BookLibraryService {
     //@Autowired
    private HashSet<Book> bookStock;
+   private HashSet<Book> bookStock1;
    private Library library;
 
     public BookLibraryService() {
 
         bookStock = new HashSet<>();
+        bookStock1 = new HashSet<>();
 
         // Add some books to the bookStock
         bookStock.add(new PrintBook(98, "Welcome to the Disney World", "278339", 98, 23, new HashSet<>(Arrays.asList("Delhi", "Mumbai", "Gujarat", "Goa"))));
         bookStock.add(new EBook(1002, "The Autobiography of XYZ", "209230340", "www.goodreads/theAutobiographyofXYZ.com", true));
+        bookStock1.add(new PrintBook(98, "Welcome to the Disney World", "278339", 98, 23, new HashSet<>(Arrays.asList("Delhi", "Mumbai", "Gujarat", "Goa"))));
+        bookStock1.add(new EBook(1002, "The Autobiography of XYZ", "209230340", "www.goodreads/theAutobiographyofXYZ.com", true));
+
     }
 
     public String addBook(Book book) {
         bookStock.add(book);
         return book.toString();
+        //return "\nAdded Successfully to the Library";
+    }
+
+    public String addBook1(BookDto bookDto) {
+        if(bookDto.getAvailableStore() != null && !bookDto.getAvailableStore().isEmpty()){
+
+        }
+//        bookStock1.add(book);
+        return "book.toString();";
         //return "\nAdded Successfully to the Library";
     }
 

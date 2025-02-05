@@ -2,9 +2,13 @@ package com.example.housing.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class EBook extends Book {
+    @Setter
+    @Getter
     private String downloadLink;
     private boolean  isDRMProtected;
 
@@ -12,7 +16,7 @@ public class EBook extends Book {
     public EBook(int bookID, String bookName,String ISBN, String downloadLink, boolean isDRMProtected) {
         super(bookID, bookName, ISBN);
         this.downloadLink = downloadLink;
-        this.isDRMProtected = false;
+        this.isDRMProtected = isDRMProtected;
     }
 
 
@@ -30,14 +34,6 @@ public class EBook extends Book {
         return isDRMProtected;
     }
 
-
-    public String getDownloadLink() {
-        return downloadLink;
-    }
-
-    public void setDownloadLink(String downloadLink) {
-        this.downloadLink = downloadLink;
-    }
     public void setDRMProtected(boolean isDRMProtected) {
         this.isDRMProtected = isDRMProtected;
     }

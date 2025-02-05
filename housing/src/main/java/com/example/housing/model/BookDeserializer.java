@@ -39,6 +39,15 @@ public class BookDeserializer extends JsonDeserializer<Book> {
             String downloadLink = node.has("downloadLink") ? node.get("downloadLink").asText() : "";
             boolean isDRMProtected = node.has("isDRMProtected") ? node.get("isDRMProtected").asBoolean() : false;
 
+//            {
+//                "bookID": 34,
+//                    "bookName": "Updated",
+//                    "ISBN": "1234567890",
+//                    "totalQuantity": 10,
+//                    "issuedQuantity": 5,
+//                    "downloadLink": "https://example.com/updatedbook",
+//                    "isDRMProtected":true
+//            }
             // Return an EBook instance
             return new EBook(bookID, bookName, ISBN, downloadLink, isDRMProtected);
         }

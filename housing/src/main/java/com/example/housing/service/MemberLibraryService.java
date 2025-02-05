@@ -5,9 +5,11 @@ import com.example.housing.model.Book;
 import com.example.housing.model.Member;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 @Service
 public class MemberLibraryService {
     private  HashSet<Member> membersRecord;
@@ -16,6 +18,9 @@ public class MemberLibraryService {
         membersRecord = new HashSet<>();
     }
 
+    public List<Member> getMembers() {
+        return List.copyOf(membersRecord);
+    }
     public void addMember(Member member) {
         membersRecord.add(member);
     }
@@ -71,5 +76,6 @@ public class MemberLibraryService {
                 .sorted(Comparator.comparing(Member::getName)) // Sorting by Member Name
                 .collect(Collectors.toList());
     }
+
 
 }

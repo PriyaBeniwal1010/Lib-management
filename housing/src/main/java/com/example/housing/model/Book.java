@@ -3,10 +3,11 @@ package com.example.housing.model;
 import com.example.housing.model.Validation.NotNull;
 import com.example.housing.model.Validation.ValidISBN;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.persistence.ManyToOne;
 
 import java.io.Serializable;
 import java.util.Objects;
-@JsonDeserialize(using = BookDeserializer.class)
+//@JsonDeserialize(using = BookDeserializer.class)
 public abstract class Book implements Serializable {
     // Book details
     private int bookID;
@@ -16,6 +17,7 @@ public abstract class Book implements Serializable {
     private String ISBN;
     private int totalQuantity;  // Total number of books available in the library
     private int issuedQuantity; // Number of books already borrowed;
+
 
 
     // Constructor to initialize the book object with details

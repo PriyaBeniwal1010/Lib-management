@@ -2,6 +2,7 @@ package com.example.housing.model;
 
 import com.example.housing.exception.BookNotBorrowedException;
 import com.example.housing.model.Validation.NotNull;
+import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -11,12 +12,14 @@ import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Member implements Serializable {
     @NotNull(message = "MemberID is a must")
+    @Id
     private int memberID;
     private String name;
     private String password;
-    private HashSet<Book> borrowedBooks;// List of books the member has borrowed
+    private HashSet<Book> borrowedBooks = new HashSet<>();// List of books the member has borrowed
 
     // Constructor to initialize member attributes
     public Member(int memberID, String name, String password, HashSet<Book> borrowedBooks) {

@@ -1,6 +1,7 @@
 package com.example.housing.controller;
 
 import ch.qos.logback.core.model.Model;
+import com.example.housing.dto.BookDto;
 import com.example.housing.exception.BookNotBorrowedException;
 import com.example.housing.exception.BookNotFoundException;
 import com.example.housing.model.*;
@@ -12,6 +13,7 @@ import com.example.housing.view.LibraryView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnCheckpointRestore;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -45,10 +47,22 @@ public class LibraryController {
         this.view = view;
     }
 
+    @GetMapping("/success")
+    public ResponseEntity<String> getSuccessMessage() {
+        return new ResponseEntity<>("Success!", HttpStatus.OK);  // 200 OK with body "Success!"
+    }
+
     @PostMapping("/Books")
     public String addBook(@RequestBody Book book){
         // Calling the BookLibraryService method to add the book
         return bookLibraryService.addBook( book);
+    }
+
+
+    @PostMapping("/Books1")
+    public String addBookDup(@RequestBody BookDto book){
+        // Calling the BookLibraryService method to add the book
+        return bookLibraryService.addBook1( book);
     }
 
     // This can be used to get details of a specific book by bookId
@@ -75,7 +89,6 @@ public class LibraryController {
         }
 
     }
-
     // Fetch all books in the library
     @GetMapping("/Books")
     public List<Book> getAllBooks() {
@@ -84,6 +97,12 @@ public class LibraryController {
 //        return List.of(book1);
         return bookLibraryService.getBookStock();
     }
+
+//    @GetMapping("/Members")
+//    //Retrieving members from the library
+//    public List<Member> getMembesRecord() {
+//        return getMembesRecord();
+//    }
 
     public void addMember(Member member) {
         memberLibraryService.addMember(member);
