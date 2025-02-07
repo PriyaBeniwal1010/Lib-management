@@ -7,6 +7,7 @@ import com.eg.HousingLibrary.model.Book;
 import com.eg.HousingLibrary.service.BookLendingService;
 import com.eg.HousingLibrary.service.BookService;
 import com.eg.HousingLibrary.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class Controller {
     private BookService bookService;
 
     @PostMapping("/users")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.addUser(userDTO));
     }
 
@@ -47,7 +48,7 @@ public class Controller {
 
     // Create a new book lending
     @PostMapping("/borrow")
-    public ResponseEntity<BookLendingDTO> borrowBook(@RequestParam Integer userId, @RequestParam Integer bookId) {
+    public ResponseEntity<BookLendingDTO> borrowBook(@Valid @RequestParam Integer userId, @RequestParam Integer bookId) {
         return ResponseEntity.ok(bookLendingService.borrowBook(userId, bookId));
     }
 
