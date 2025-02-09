@@ -3,6 +3,7 @@ package com.eg.HousingLibrary.service;
 
 import com.eg.HousingLibrary.ConverterUtility.EntityDTOMapper;
 import com.eg.HousingLibrary.dto.UserDTO;
+import com.eg.HousingLibrary.globalException.ResourceNotFoundException;
 import com.eg.HousingLibrary.model.User;
 import com.eg.HousingLibrary.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -34,6 +35,8 @@ public class UserService {
 
     //find user by its mid
     public Optional<User> findUserById(Integer id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         return userRepository.findById(id);
     }
 

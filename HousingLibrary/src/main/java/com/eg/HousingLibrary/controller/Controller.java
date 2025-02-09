@@ -1,9 +1,11 @@
 package com.eg.HousingLibrary.controller;
 
+import com.eg.HousingLibrary.ConverterUtility.EntityDTOMapper;
 import com.eg.HousingLibrary.dto.BookDTO;
 import com.eg.HousingLibrary.dto.BookLendingDTO;
 import com.eg.HousingLibrary.dto.UserDTO;
 import com.eg.HousingLibrary.model.Book;
+import com.eg.HousingLibrary.model.BookLending;
 import com.eg.HousingLibrary.service.BookLendingService;
 import com.eg.HousingLibrary.service.BookService;
 import com.eg.HousingLibrary.service.UserService;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class Controller {
@@ -57,6 +60,12 @@ public class Controller {
         return ResponseEntity.ok(bookLendingService.returnBook(lendingId));
     }
 
+    @GetMapping("/borrow/overdue/{id}")
+    public ResponseEntity<Boolean> isBookOverdue(@PathVariable("lendingId") Integer lendingId) {
+        boolean isOverdue = bookLendingService.isBookOverdue(lendingId);
+        return ResponseEntity.ok(isOverdue);
+    }
+
     @PostMapping("/books")
     public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO) {
         return ResponseEntity.ok(bookService.addBook(bookDTO));
@@ -66,6 +75,43 @@ public class Controller {
     public ResponseEntity<List<BookDTO>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
+
+    // Get Book by ID
+    @GetMapping("/books/{id}")
+    public Optional<BookDTO> getBookById(@PathVariable("id") Integer id) {
+       return bookService.getBookById(id).map(EntityDTOMapper::toBookDTO);
+    }
+
+    // Update Book by ID
+    @PutMapping("/books/{id}")
+    public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Integer id, @RequestBody BookDTO bookDTO) {
+        BookDTO updatedBook = bookService.updateBook(id, bookDTO);
+        if (updatedBook != null) {
+            return ResponseEntity.ok(updatedBook);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Delete Book by ID
+    @DeleteMapping("/books/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable("id") Integer id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build(); // No content as the book is deleted
+    }
+
+    @GetMapping("/overdue")
+    public void getOverdueBooks() {
+        bookLendingService.sendOverDueReminders();
+        ResponseEntity.ok();
+    }
+
+    @PostMapping("/books/bulk")
+    public ResponseEntity<String> processBulkBooks(@RequestBody List<BookDTO> books) {
+        bookService.processBulkBooks(books);
+        return ResponseEntity.ok("Book processing started asynchronously!");
+    }
+
 
 
 
