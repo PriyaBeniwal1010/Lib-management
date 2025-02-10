@@ -40,12 +40,10 @@ public class Controller {
     private BookLendingService bookLendingService;
     @Autowired
     private BookService bookService;
-    @Autowired
     ApplicationContext context;
-
-    //Make use of @Slf4j or else: private static final Logger logger= LoggerFactory.getLogger(Controller.class);
     @Autowired
     private UserRepository userRepository;
+
 
     @PostMapping("/users")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
@@ -91,7 +89,7 @@ public class Controller {
         return ResponseEntity.ok(bookLendingService.returnBook(lendingId));
     }
 
-    @GetMapping("/borrow/overdue/{id}")
+    @GetMapping("/borrow/overdue/{lendingId}")
     public ResponseEntity<Boolean> isBookOverdue(@PathVariable("lendingId") Integer lendingId) {
         boolean isOverdue = bookLendingService.isBookOverdue(lendingId);
         return ResponseEntity.ok(isOverdue);
@@ -144,7 +142,7 @@ public class Controller {
     }
 
     @PostMapping("/{userId}/upload-img")
-    public ResponseEntity<String> uploadProfilePicture(@PathVariable("userId") Integer id, @RequestParam MultipartFile file) throws IOException {
+    public ResponseEntity<String> uploadProfilePicture(@PathVariable("userId") Integer id, @RequestParam MultipartFile file) {
         String filePath=userService.uploadProfilePicture(id, file);
         return ResponseEntity.ok("File uploaded Successfully"+filePath);
     }

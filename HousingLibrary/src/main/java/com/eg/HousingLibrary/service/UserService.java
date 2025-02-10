@@ -45,8 +45,6 @@ public class UserService {
 
     //find user by its mid
     public Optional<User> findUserById(Integer id){
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         return userRepository.findById(id);
     }
 
