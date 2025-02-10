@@ -1,21 +1,21 @@
 package com.eg.HousingLibrary.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
 @Valid
 public class UserDTO {
 
-    @Size(min=0, max=100, message="Enter valid no")
+    @Min(1) // Ensures ID is at least 1
+    @Max(99999) // Optional: Ensures ID is within a reasonable range
     private Integer id;
     @NotBlank(message="Name can't be blank")
     private String name;
     @Email(message="Invalid format")
     private String email;
+    private String image_file;
 
 
 }

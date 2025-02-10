@@ -12,6 +12,7 @@ public class User {
     private Integer id;
     private String name;
     private String email;
+    private String image_file;
 
     public Integer getid() {
         return id;
@@ -36,4 +37,13 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void setProfilePicture(String filePath) {
+        this.image_file=filePath;
+    }
+
+    public String getProfilePicture(){
+        return image_file;
+    }
+
 }

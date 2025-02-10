@@ -3,10 +3,12 @@ package com.eg.HousingLibrary.service;
 import com.eg.HousingLibrary.ConverterUtility.EntityDTOMapper;
 import com.eg.HousingLibrary.dto.BookDTO;
 import com.eg.HousingLibrary.model.Book;
+import com.eg.HousingLibrary.model.BookIssueReceipt;
 import com.eg.HousingLibrary.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class BookService {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    private ApplicationContext context;
+
     //Processing bulk books to be added in the database
     public CompletableFuture<Void> processBulkBooks(List<BookDTO> books) {
         return CompletableFuture.runAsync(() -> {
@@ -38,6 +43,8 @@ public class BookService {
             }
         });
     }
+
+
 
     public List<BookDTO> getAllBooks() {
         return bookRepository.findAll().stream()
@@ -70,5 +77,7 @@ public class BookService {
     public void deleteBook(Integer id){
         bookRepository.deleteById(id);
     }
+
+
 
 }
