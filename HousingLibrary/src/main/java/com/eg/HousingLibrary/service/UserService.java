@@ -1,22 +1,18 @@
 package com.eg.HousingLibrary.service;
 
 
-import com.eg.HousingLibrary.ConverterUtility.EntityDTOMapper;
+import com.eg.HousingLibrary.utility.EntityDTOMapper;
 import com.eg.HousingLibrary.dto.UserDTO;
 import com.eg.HousingLibrary.exception.UserNotFoundException;
-import com.eg.HousingLibrary.globalException.ResourceNotFoundException;
 import com.eg.HousingLibrary.model.User;
 import com.eg.HousingLibrary.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -91,13 +87,17 @@ public class UserService {
             user.setProfilePicture(filePath);
             userRepository.save(user);
 
+
             return filePath;
         } catch (Exception e) {
             throw new RuntimeException("File upload failed: " + e.getMessage());
         }
     }
 
+    public UserDTO getUserByEmail(String email){
+        Optional<User> user= userRepository.findByEmail(email);
+        return user.map(EntityDTOMapper::toUserDTO).orElse(null);
 
-
+    }
 
 }

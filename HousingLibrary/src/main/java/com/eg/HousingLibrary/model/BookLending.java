@@ -30,7 +30,6 @@ public class BookLending {
     private LocalDate dueDate;
     private LocalDate returnedDate;
 
-    // Constants for lending period
     private static final int LENDING_PERIOD_DAYS = 14; // 2 weeks lending period
 
     public void borrowBook(User user, Book book) {

@@ -1,6 +1,6 @@
 package com.eg.HousingLibrary.service;
 
-import com.eg.HousingLibrary.ConverterUtility.EntityDTOMapper;
+import com.eg.HousingLibrary.utility.EntityDTOMapper;
 import com.eg.HousingLibrary.dto.BookLendingDTO;
 import com.eg.HousingLibrary.model.Book;
 import com.eg.HousingLibrary.model.BookLending;

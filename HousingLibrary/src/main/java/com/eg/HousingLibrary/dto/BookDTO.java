@@ -20,4 +20,5 @@ public class BookDTO {
     @Size(min = 2, max = 50, message = "Author name must be between 2 and 50 characters")
     private String author;
 
+
 }

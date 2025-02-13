@@ -16,6 +16,8 @@ public class UserDTO {
     @Email(message="Invalid format")
     private String email;
     private String image_file;
+    @Min(5)
+    private String password;
 
 
 }
