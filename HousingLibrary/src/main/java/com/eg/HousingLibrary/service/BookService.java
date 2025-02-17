@@ -6,7 +6,10 @@ import com.eg.HousingLibrary.model.Book;
 import com.eg.HousingLibrary.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,6 +28,7 @@ public class BookService {
     private ApplicationContext context;
 
     //Processing bulk books to be added in the database
+    @Async
     public CompletableFuture<Void> processBulkBooks(List<BookDTO> books) {
         return CompletableFuture.runAsync(() -> {
             for (BookDTO bookDTO : books) {
@@ -39,6 +43,7 @@ public class BookService {
 
 
 
+    @Cacheable("books")
     public List<BookDTO> getAllBooks() {
         return bookRepository.findAll().stream()
                 .map(EntityDTOMapper::toBookDTO)
@@ -47,6 +52,7 @@ public class BookService {
 
     //Add a new book to the db
     @Transactional
+    @CacheEvict(value = "books", allEntries = true)
     public BookDTO addBook(BookDTO bookDTO) {
         Book book = EntityDTOMapper.toBookEntity(bookDTO);
         return EntityDTOMapper.toBookDTO(bookRepository.save(book));

@@ -25,6 +25,8 @@ public class BookLendingService {
     private final UserRepository userRepository;
     @Autowired
     private final BookRepository bookRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     public BookLendingService(BookLendingRepository bookLendingRepository, UserRepository userRepository, BookRepository bookRepository) {
         this.bookLendingRepository = bookLendingRepository;
@@ -52,7 +54,9 @@ public class BookLendingService {
         BookLending bookLending = new BookLending();
         bookLending.borrowBook(user, book);
 
+        notificationService.sendOverdueReminder(user.getEmail());
         return EntityDTOMapper.toBookLendingDTO(bookLendingRepository.save(bookLending));
+
     }
 
     public BookLendingDTO returnBook(Integer lendingId) {
